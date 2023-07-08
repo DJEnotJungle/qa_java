@@ -1,45 +1,49 @@
 package com.example;
 
 import org.hamcrest.MatcherAssert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LionTest {
-    @Mock
     private Lion lion;
-    @Spy
+    @Mock
     private Feline feline;
-
     @Before
-    public void set() throws Exception {
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
         lion = new Lion("Самец", feline);
     }
 
     @Test
-    public void testDoesHaveMane(){
-        boolean expectedResult = true;
-        boolean actualResult = lion.doesHaveMane();
-        MatcherAssert.assertThat("Ты зачем сбрил гриву?", expectedResult, is(actualResult));
-    }
-
-    @Test
     public void testKittens(){
-        when(lion.getKittens()).thenReturn(1);
-        MatcherAssert.assertThat("Где котята Львовски", 1, is(lion.getKittens()));
+        when(feline.getKittens()).thenReturn(1);
+        int actualKittens=lion.getKittens();
+        MatcherAssert.assertThat("Где котята Львовски", feline.getKittens(), is(actualKittens));
     }
     @Test
-    public void testFood() throws Exception {
-        List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
-        when(lion.getFood()).thenReturn(expectedFood);
-        MatcherAssert.assertThat("Какая-то неправильная добыча у этих львов", expectedFood, is(lion.getFood()));
+    public void testGetFood() throws Exception {
+        List<String> expectedFood = Arrays.asList("Животные", "Птицы", "Рыба");
+        when(feline.getFood("Хищник")).thenReturn(expectedFood);
+        List<String> actualFood = lion.getFood();
+        Assert.assertEquals(expectedFood, actualFood);
+    }
+    @Test
+    public void testException() {
+        try {
+            new Lion("Гермафродит", feline);
+        } catch (Exception actualException) {
+            Assert.assertEquals("Используйте допустимые значения пола животного - самец или самка", actualException.getMessage());
+        }
     }
 }

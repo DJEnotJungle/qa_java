@@ -4,16 +4,12 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CatTest {
-    @Spy
-    private Feline feline;
     @InjectMocks
     private Cat cat;
 
@@ -23,8 +19,8 @@ public class CatTest {
     }
     @Test
     public void testFood() throws Exception {
-        when(cat.getFood()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        List<String> actualFood = (new Cat(new Feline())).getFood();
         List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
-        MatcherAssert.assertThat("Вот что я люблю", expectedFood, is(cat.getFood()));
+        MatcherAssert.assertThat("Вот что я люблю", expectedFood, is(actualFood));
     }
 }
