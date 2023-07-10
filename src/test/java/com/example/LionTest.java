@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,10 +39,7 @@ public class LionTest {
     }
     @Test
     public void testException() {
-        try {
-            new Lion("Гермафродит", feline);
-        } catch (Exception actualException) {
-            Assert.assertEquals("Используйте допустимые значения пола животного - самец или самка", actualException.getMessage());
-        }
+        Exception actualException = Assert.assertThrows(Exception.class, () -> new Lion("Гермафродит", feline));
+        Assert.assertEquals("Используйте допустимые значения пола животного - самец или самка", actualException.getMessage());
     }
 }

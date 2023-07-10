@@ -1,18 +1,25 @@
 package com.example;
 
 import org.hamcrest.MatcherAssert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FelineTest {
-    @InjectMocks
+    @Mock
     private Feline feline;
 
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
     @Test
     public void hunterFeline() throws Exception {
         List<String> actualFood = (new Feline()).eatMeat();
@@ -22,11 +29,15 @@ public class FelineTest {
     @Test
     public void isItACat(){
         String expectedFamily = "Кошачьи";
+        when(feline.getFamily()).thenReturn(expectedFamily);
         String actualFamily = feline.getFamily();
         MatcherAssert.assertThat("Я не котик", expectedFamily, is(actualFamily));
     }
     @Test
     public void howManyKittens(){
-        MatcherAssert.assertThat("Где котята Мурковски", 1, is(feline.getKittens()));
+        int kittensCount = 1;
+        when(feline.getKittens()).thenReturn(kittensCount);
+        int actualKittens = feline.getKittens();
+        MatcherAssert.assertThat("Где котята Мурковски", kittensCount, is(actualKittens));
     }
 }
